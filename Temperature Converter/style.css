@@ -1,0 +1,137 @@
+body {
+    font-family: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
+    background-color: hsl(0 0% 85%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#boxes {
+    display: inline-block;
+    background-color: hsl(0 0% 95%);
+    border: 25px solid hsl(0 0% 95%);
+    border-radius: 50px;
+    text-align: left;
+    padding: 1rem;
+}
+
+#valueBox{
+    background-color: hsl(0 0% 100%);
+    border: solid hsl(0 0% 100%);
+    border-radius: 50px;
+    text-align: center;
+    padding: 1rem;
+}
+
+#numberInput {
+    width: 100%;
+    border: none;              
+    outline: none;                 
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    background: transparent;        
+    text-align: left;             
+}
+
+#resultBox {
+    background-color: hsl(0 0% 30%);  /* dark grey background */
+    border: 25px solid hsl(0 0% 30%);
+    border-radius: 50px;
+    text-align: center;
+    color: hsl(0 0% 100%);
+    font-size: 1.2rem;
+    transition: transform 0.2s ease, background-color 0.3s ease; /* animation */
+}
+
+/* Animation class to trigger when result updates */
+#resultBox.updated {
+    transform: scale(1.05);                  
+    background-color: hsl(0 0% 30%);         
+}
+
+#resultOutput{
+    width: 100%;
+    border: none;              
+    outline: none;                 
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    background: transparent;        
+    text-align: left;  
+}
+
+#fahrenheitBox, #celsiusBox {
+    display: inline-block;
+    position: relative; 
+    background-color: hsl(0 0% 100%);
+    border: 25px solid hsl(0 0% 100%);
+    border-radius: 50px;
+}
+
+#convertBox {
+    background-color: hsl(0 0% 100%);
+    border: solid hsl(0 0% 100%);
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Paragraphs */
+#fahrenheitBox p, #celsiusBox p 
+{ color: hsl(0 0% 45%); }
+
+/* Headings */
+#fahrenheitBox h1, #celsiusBox h1, #convertBox h1, #convertBox p 
+{ color: hsl(0 0% 0%); }
+
+/* Row containing image + radio */
+.row {
+    display: flex;
+    justify-content: flex-start; /* keep image at start */
+    position: relative;          /* container for absolute radio */
+}
+
+.radio {
+    width: 20px;
+    height: 20px;
+    appearance: none;
+    border: 2px solid hsl(0 0% 80%);
+    border-radius: 50%;
+    background-color: hsl(0 0% 80%);
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/* Checked state */
+.radio:checked {
+    background-color: hsl(0 0% 0%);
+    border-color: hsl(0 0% 0%);
+}
+
+/* Pure CSS checkmark */
+.radio:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;    
+    height: 15px;
+    background-image: url('check.svg'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translate(-50%, -50%); 
+    pointer-events: none;
+}
+
+#valueBox, #resultBox, #fahrenheitBox, #celsiusBox, #convertBox {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#valueBox:hover, #resultBox:hover, #fahrenheitBox:hover, #celsiusBox:hover, #convertBox:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
