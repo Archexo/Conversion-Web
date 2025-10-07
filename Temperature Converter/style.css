@@ -1,6 +1,36 @@
+:root {
+    --bg: hsl(0 0% 85%);
+    --panel: hsl(0 0% 95%);
+    --panel-border: hsl(0 0% 95%);
+    --card: hsl(0 0% 100%);
+    --text: hsl(0 0% 0%);
+    --muted: hsl(0 0% 45%);
+    --radio-unchecked: hsl(0 0% 80%);
+    --radio-checked: hsl(0 0% 0%);
+    --result-bg: hsl(0 0% 30%);
+    --result-border: hsl(0 0% 30%);
+    --result-text: hsl(0 0% 100%);
+    --shadow: rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"] {
+    --bg: hsl(0 0% 10%);
+    --panel: hsl(0 0% 15%);
+    --panel-border: hsl(0 0% 15%);
+    --card: hsl(0 0% 20%);
+    --text: hsl(0 0% 95%);
+    --muted: hsl(0 0% 70%);
+    --radio-unchecked: hsl(0 0% 55%);
+    --radio-checked: hsl(0 0% 100%);
+    --result-bg: hsl(0 0% 70%);
+    --result-border: hsl(0 0% 70%);
+    --result-text: hsl(0 0% 10%);
+    --shadow: rgba(0, 0, 0, 0.6);
+}
+
 body {
     font-family: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
-    background-color: hsl(0 0% 85%);
+    background-color: var(--bg);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -10,16 +40,16 @@ body {
 
 #boxes {
     display: inline-block;
-    background-color: hsl(0 0% 95%);
-    border: 25px solid hsl(0 0% 95%);
+    background-color: var(--panel);
+    border: 25px solid var(--panel-border);
     border-radius: 50px;
     text-align: left;
     padding: 1rem;
 }
 
 #valueBox{
-    background-color: hsl(0 0% 100%);
-    border: solid hsl(0 0% 100%);
+    background-color: var(--card);
+    border: solid var(--card);
     border-radius: 50px;
     text-align: center;
     padding: 1rem;
@@ -33,14 +63,19 @@ body {
     font-size: 1rem;
     background: transparent;        
     text-align: left;             
+    color: var(--text);
+}
+
+#numberInput::placeholder {
+    color: var(--muted);
 }
 
 #resultBox {
-    background-color: hsl(0 0% 30%);  /* dark grey background */
-    border: 25px solid hsl(0 0% 30%);
+    background-color: var(--result-bg);  /* dark grey background */
+    border: 25px solid var(--result-border);
     border-radius: 50px;
     text-align: center;
-    color: hsl(0 0% 100%);
+    color: var(--result-text);
     font-size: 1.2rem;
     transition: transform 0.2s ease, background-color 0.3s ease; /* animation */
 }
@@ -48,7 +83,7 @@ body {
 /* Animation class to trigger when result updates */
 #resultBox.updated {
     transform: scale(1.05);                  
-    background-color: hsl(0 0% 30%);         
+    background-color: var(--result-bg);         
 }
 
 #resultOutput{
@@ -64,14 +99,14 @@ body {
 #fahrenheitBox, #celsiusBox {
     display: inline-block;
     position: relative; 
-    background-color: hsl(0 0% 100%);
-    border: 25px solid hsl(0 0% 100%);
+    background-color: var(--card);
+    border: 25px solid var(--card);
     border-radius: 50px;
 }
 
 #convertBox {
-    background-color: hsl(0 0% 100%);
-    border: solid hsl(0 0% 100%);
+    background-color: var(--card);
+    border: solid var(--card);
     border-radius: 50px;
     text-align: center;
     cursor: pointer;
@@ -79,11 +114,11 @@ body {
 
 /* Paragraphs */
 #fahrenheitBox p, #celsiusBox p 
-{ color: hsl(0 0% 45%); }
+{ color: var(--muted); }
 
 /* Headings */
 #fahrenheitBox h1, #celsiusBox h1, #convertBox h1, #convertBox p 
-{ color: hsl(0 0% 0%); }
+{ color: var(--text); }
 
 /* Row containing image + radio */
 .row {
@@ -96,9 +131,9 @@ body {
     width: 20px;
     height: 20px;
     appearance: none;
-    border: 2px solid hsl(0 0% 80%);
+    border: 2px solid var(--radio-unchecked);
     border-radius: 50%;
-    background-color: hsl(0 0% 80%);
+    background-color: var(--radio-unchecked);
     cursor: pointer;
     outline: none;
     position: absolute;
@@ -108,8 +143,8 @@ body {
 
 /* Checked state */
 .radio:checked {
-    background-color: hsl(0 0% 0%);
-    border-color: hsl(0 0% 0%);
+    background-color: var(--radio-checked);
+    border-color: var(--radio-checked);
 }
 
 /* Pure CSS checkmark */
@@ -129,9 +164,41 @@ body {
 }
 
 #valueBox, #resultBox, #fahrenheitBox, #celsiusBox, #convertBox {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px var(--shadow);
 }
 
 #valueBox:hover, #resultBox:hover, #fahrenheitBox:hover, #celsiusBox:hover, #convertBox:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+/* Theme toggle button (top-right) */
+#themeToggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid var(--panel-border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: 0 2px 6px var(--shadow);
+    transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+#themeToggle:hover {
+    transform: translateY(-2px);
+}
+
+#themeToggle:focus-visible {
+    outline: 2px solid #6ca0ff;
+    outline-offset: 2px;
+}
+
+#themeToggle img {
+    display: block;
 }
