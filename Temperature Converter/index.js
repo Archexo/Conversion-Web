@@ -106,13 +106,17 @@ numberInput.addEventListener('focus', () => {
 })
 
 function makeRadioToggleable(radio) {
-    radio.addEventListener('click', function() {
-        if (this.wasChecked) {
-            this.checked = false
+    // Capture the checked state BEFORE the click toggles it
+    radio.addEventListener('pointerdown', () => {
+        radio.dataset.wasChecked = radio.checked ? 'true' : 'false'
+    })
+    // On click, if it was already checked, allow deselect; otherwise keep default selection
+    radio.addEventListener('click', () => {
+        const wasChecked = radio.dataset.wasChecked === 'true'
+        if (wasChecked) {
+            radio.checked = false
         }
-        // Save the current state
-        this.wasChecked = this.checked
-    });
+    })
 }
 
 // Apply to your radios

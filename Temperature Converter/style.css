@@ -63,6 +63,11 @@ body {
     font-size: 1rem;
     background: transparent;        
     text-align: left;             
+    color: var(--text);
+}
+
+#numberInput::placeholder {
+    color: var(--muted);
 }
 
 #resultBox {
