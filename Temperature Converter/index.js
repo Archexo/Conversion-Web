@@ -4,6 +4,63 @@ const celsiusRadio = document.querySelector('#celsiusBox .radio')
 const convertButton = document.getElementById('convertBox')
 const resultOutput = document.getElementById('resultOutput')
 
+// Theme: toggle + persistence
+const THEME_STORAGE_KEY = 'theme'
+const themeToggleButton = document.getElementById('themeToggle')
+
+function updateThemeToggleIcon(theme) {
+    if (!themeToggleButton) return
+    if (theme === 'dark') {
+        themeToggleButton.textContent = '☀️'
+        themeToggleButton.setAttribute('aria-label', 'Switch to light mode')
+        themeToggleButton.title = 'Switch to light mode'
+    } else {
+        themeToggleButton.textContent = '🌙'
+        themeToggleButton.setAttribute('aria-label', 'Switch to dark mode')
+        themeToggleButton.title = 'Switch to dark mode'
+    }
+}
+
+function applyTheme(theme) {
+    const themeToApply = theme === 'dark' ? 'dark' : 'light'
+    document.documentElement.setAttribute('data-theme', themeToApply)
+    updateThemeToggleIcon(themeToApply)
+}
+
+function getPreferredTheme() {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY)
+    if (saved === 'dark' || saved === 'light') return saved
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+}
+
+function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || getPreferredTheme()
+    const next = current === 'dark' ? 'light' : 'dark'
+    localStorage.setItem(THEME_STORAGE_KEY, next)
+    applyTheme(next)
+}
+
+// Initialize theme on load
+applyTheme(getPreferredTheme())
+
+// React to system changes only if user hasn't chosen
+if (window.matchMedia) {
+    const mql = window.matchMedia('(prefers-color-scheme: dark)')
+    mql.addEventListener('change', (e) => {
+        const saved = localStorage.getItem(THEME_STORAGE_KEY)
+        if (saved !== 'dark' && saved !== 'light') {
+            applyTheme(e.matches ? 'dark' : 'light')
+        }
+    })
+}
+
+// Hook up toggle UI
+if (themeToggleButton) {
+    themeToggleButton.addEventListener('click', toggleTheme)
+}
+
 function triggerAnimation() {
     const resultBox = document.getElementById('resultBox')
     resultBox.classList.add('updated')
