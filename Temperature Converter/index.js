@@ -25,6 +25,7 @@ function applyTheme(theme) {
     const themeToApply = theme === 'dark' ? 'dark' : 'light'
     document.documentElement.setAttribute('data-theme', themeToApply)
     updateThemeToggleIcon(themeToApply)
+    applyThemeAssets(themeToApply)
 }
 
 function getPreferredTheme() {
@@ -59,6 +60,47 @@ if (window.matchMedia) {
 // Hook up toggle UI
 if (themeToggleButton) {
     themeToggleButton.addEventListener('click', toggleTheme)
+}
+
+// Swap icons/images for dark mode assets
+function applyThemeAssets(theme) {
+    // favicon swap
+    const faviconLink = document.querySelector('link[rel="icon"]')
+    if (faviconLink) {
+        if (!faviconLink.dataset.lightHref) {
+            faviconLink.dataset.lightHref = faviconLink.getAttribute('href') || 'favicon.png'
+        }
+        // Allow HTML to specify data-dark-href, otherwise use a conventional name
+        const darkHref = faviconLink.dataset.darkHref || 'favicon-dark.png'
+        faviconLink.setAttribute('href', theme === 'dark' ? darkHref : faviconLink.dataset.lightHref)
+    }
+
+    // Helper to set themed image source with graceful fallback
+    function setThemedImage(imgEl, darkSrc) {
+        if (!imgEl) return
+        if (!imgEl.dataset.boundError) {
+            imgEl.addEventListener('error', () => {
+                // Revert to light image if dark asset is missing
+                if (document.documentElement.getAttribute('data-theme') === 'dark' && imgEl.dataset.lightSrc) {
+                    imgEl.src = imgEl.dataset.lightSrc
+                }
+            })
+            imgEl.dataset.boundError = 'true'
+        }
+        if (theme === 'dark') {
+            if (!imgEl.dataset.lightSrc) imgEl.dataset.lightSrc = imgEl.src
+            const preferredDark = imgEl.dataset.darkSrc || darkSrc
+            imgEl.src = preferredDark
+        } else if (imgEl.dataset.lightSrc) {
+            imgEl.src = imgEl.dataset.lightSrc
+        }
+    }
+
+    // Celsius & Fahrenheit artwork swaps
+    const celsiusImg = document.querySelector('#celsiusBox .row img')
+    const fahrenheitImg = document.querySelector('#fahrenheitBox .row img')
+    setThemedImage(celsiusImg, 'icons/celsius-dark.svg')
+    setThemedImage(fahrenheitImg, 'icons/fahrenheit-dark.svg')
 }
 
 function triggerAnimation() {
