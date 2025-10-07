@@ -7,17 +7,24 @@ const resultOutput = document.getElementById('resultOutput')
 // Theme: toggle + persistence
 const THEME_STORAGE_KEY = 'theme'
 const themeToggleButton = document.getElementById('themeToggle')
+const themeToggleIcon = document.getElementById('themeToggleIcon')
 
 function updateThemeToggleIcon(theme) {
     if (!themeToggleButton) return
-    if (theme === 'dark') {
-        themeToggleButton.textContent = '☀️'
-        themeToggleButton.setAttribute('aria-label', 'Switch to light mode')
-        themeToggleButton.title = 'Switch to light mode'
+    const isDark = theme === 'dark'
+    themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+    themeToggleButton.title = isDark ? 'Switch to light mode' : 'Switch to dark mode'
+    if (themeToggleIcon) {
+        if (!themeToggleIcon.dataset.lightSrc) {
+            // Default light icon data URL fallback (moon emoji SVG via data URL could be replaced if needed)
+            themeToggleIcon.dataset.lightSrc = themeToggleIcon.getAttribute('src') || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>'
+        }
+        // Expect user-provided NightMode icons; use conventional names as fallback
+        const darkIcon = themeToggleIcon.dataset.darkSrc || 'NightMode_toggle-dark.svg'
+        themeToggleIcon.src = isDark ? darkIcon : themeToggleIcon.dataset.lightSrc
     } else {
-        themeToggleButton.textContent = '🌙'
-        themeToggleButton.setAttribute('aria-label', 'Switch to dark mode')
-        themeToggleButton.title = 'Switch to dark mode'
+        // Text fallback
+        themeToggleButton.textContent = isDark ? '☀️' : '🌙'
     }
 }
 
@@ -99,8 +106,23 @@ function applyThemeAssets(theme) {
     // Celsius & Fahrenheit artwork swaps
     const celsiusImg = document.querySelector('#celsiusBox .row img')
     const fahrenheitImg = document.querySelector('#fahrenheitBox .row img')
-    setThemedImage(celsiusImg, 'icons/celsius-dark.svg')
-    setThemedImage(fahrenheitImg, 'icons/fahrenheit-dark.svg')
+    // Support user-provided NightMode_*. assets embedded as data URLs or files
+    if (celsiusImg) {
+        celsiusImg.dataset.darkSrc = celsiusImg.dataset.darkSrc || 'NightMode_celsius.png'
+        setThemedImage(celsiusImg, celsiusImg.dataset.darkSrc)
+    }
+    if (fahrenheitImg) {
+        fahrenheitImg.dataset.darkSrc = fahrenheitImg.dataset.darkSrc || 'NightMode_fahrenheit.png'
+        setThemedImage(fahrenheitImg, fahrenheitImg.dataset.darkSrc)
+    }
+
+    // Theme Toggle icon
+    if (themeToggleIcon) {
+        themeToggleIcon.dataset.darkSrc = themeToggleIcon.dataset.darkSrc || 'NightMode_toggle-dark.svg'
+        // ensure icon updates after dataset defaults
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light'
+        updateThemeToggleIcon(currentTheme)
+    }
 }
 
 function triggerAnimation() {
